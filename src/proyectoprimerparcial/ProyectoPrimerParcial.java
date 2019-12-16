@@ -7,41 +7,30 @@ Integrantes:
 - Tenempaguay Borja Jenniffer
  */
 package proyectoprimerparcial;
-import java.awt.Menu;
 import java.io.EOFException;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 //import proyectoprimerparcial.clasificacion_empresa.Clasificacion_Empresa;
 import proyectoprimerparcial.clasificacion_empresa.Departamento;
 import proyectoprimerparcial.clasificacion_empresa.Area;
 import proyectoprimerparcial.clasificacion_empresa.Cargo;
-import proyectoprimerparcial.clasificacion_empresa.Clasificacion_Empresa;
-//import proyectoprimerparcial.clasificacion_empresa.Cargo;ihli
+//import proyectoprimerparcial.clasificacion_empresa.Cargo;
 
 public class ProyectoPrimerParcial {
-    static HashMap <String,Empleado> emplist = new HashMap<>();
-    static HashMap<String, Departamento> Dptos_empresa = new HashMap();
-    static HashMap<String, Area> Areas_empresa = new HashMap();
-    static HashMap<String, Cargo> Cargos_empresa = new HashMap();
-    Archivos arch=new Archivos();
+    HashMap <String,Empleado> emplist = new HashMap<>();
+    HashMap<String, Departamento> Dptos_empresa = new HashMap();
+    HashMap<String, Area> Areas_empresa = new HashMap();
+    HashMap<String, Cargo> Cargos_empresa = new HashMap();
+   
     
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
-        
-       try{
-        emplist= Archivos.LeerArchivo("Empleado",emplist);//("NombreArchivo,HashMap lista")
-        Dptos_empresa=Archivos.LeerArchivo("Departamento",Dptos_empresa);
-        Areas_empresa= Archivos.LeerArchivo("Area",Areas_empresa);
-        Cargos_empresa= Archivos.LeerArchivo("Cargo",Cargos_empresa);
-       }catch(FileNotFoundException e)
-       {
-           System.out.println("El archivo no se pudo encontrar");
-       }catch(EOFException a){
-           System.out.println("Uno o varios de los archivos estan vacios o tienen datos corruptos");
-       }
+    public static void main(String[] args){
+        Archivos arch=new Archivos();
+        arch.LeerArchivo("Departamento",Dptos_empresa);
+       /* arch.LeerArchivo("Empleado",emplist);//("NombreArchivo,HashMap lista")
+        arch.LeerArchivo("Area",Areas_empresa);
+        arch.LeerArchivo("Cargo",Cargos_empresa);*/
            
     ProyectoPrimerParcial m =new ProyectoPrimerParcial();
         m.MENU();
@@ -113,8 +102,8 @@ public class ProyectoPrimerParcial {
                     System.out.print("\n" +nom);
                     System.out.print("\nEscoja una opción");
                     System.out.print("\n1.    INGRESAR");
-                    System.out.print("\n2.    BUSCAR ");
-                    System.out.print("\n3.    EDITAR");
+                    System.out.print("\n2.    EDITAR ");
+                    System.out.print("\n3.    BUSCAR");
                     System.out.print("\n4.    ELIMINAR ");
                     System.out.print("\n0.    Salir ");
                     System.out.print("\nEscoja ---> ");
@@ -133,7 +122,7 @@ public class ProyectoPrimerParcial {
     }
     
     //EDIT
-    public static void IngresoDepsAreasCargos() throws IOException
+    public static void IngresoDepsAreasCargos() 
     {
         HashMap<String, Departamento> Dptos_empresa = new HashMap();
         
@@ -160,9 +149,10 @@ public class ProyectoPrimerParcial {
         }while(op!=0);
     }
     //HERE
-    public HashMap EdicionDepartamentos(String nom) throws IOException
+    public HashMap EdicionDepartamentos(String nom)
     {
         Scanner ingreso= new Scanner(System.in);
+        Archivos arch = new Archivos();
         HashMap<String, Departamento> Dptos_empresa = new HashMap();
         Departamento depss= new Departamento();
         String edit_dep, edit_depn;
@@ -178,7 +168,11 @@ public class ProyectoPrimerParcial {
                     depss.MostrarColeccion(Dptos_empresa);
                     depss.Ingreso(Dptos_empresa, "departamento");
                     Dptos_empresa.put(depss.getCodigo(), depss);
-                    arch.EscribirArchivo(depss, "Departamento.txt");
+                    try{
+                    arch.EscribirArchivo(depss, "Departamento");
+                    }catch(IOException e){
+                        System.out.println(e+" 179");
+                    }
                     break;
                 }
                 case 2:
@@ -204,6 +198,8 @@ public class ProyectoPrimerParcial {
                         else
                         {
                             System.out.println("Departamento no existe, no se puede modificar");
+                            System.out.println("Revisar linea 207 el while mal");
+                            break;
                         }
                     }while(Dptos_empresa.get(edit_dep) == null);
                     break;
@@ -235,9 +231,10 @@ public class ProyectoPrimerParcial {
         }while(op!=0);
         return Dptos_empresa;
     }
-    public  HashMap EdicionAreas(String nom) throws IOException
+    public  HashMap EdicionAreas(String nom)
     {
         Scanner ingreso= new Scanner(System.in);
+        Archivos arch = new Archivos();
         HashMap<String, Departamento> Dptos_empresa = new HashMap();
         HashMap<String, Area> Areas_empresa = new HashMap();
         Departamento depss= new Departamento();
@@ -258,7 +255,11 @@ public class ProyectoPrimerParcial {
                     a.MostrarColeccion(Areas_empresa);
                     a.Ingreso(Areas_empresa, "area");
                     Areas_empresa.put(a.getCodigo(), a);
-                    arch.EscribirArchivo(Areas_empresa, "Area.txt");
+                    try{
+                    arch.EscribirArchivo(Areas_empresa, "Area");
+                    }catch(IOException e){
+                        System.out.println(e+" 264");
+                    }
                     break;
                 }
                 case 2:
@@ -319,14 +320,13 @@ public class ProyectoPrimerParcial {
         depss.Editar(Dptos_empresa);
         return Dptos_empresa;
     }
-    public  HashMap EdicionCargos(String nom) throws IOException
+    public  HashMap EdicionCargos(String nom)
     {
         Scanner ingreso= new Scanner(System.in);
+        Archivos arch = new Archivos();
         String edit_dep, edit_depn;
         int op;
-       /* HashMap<String, Departamento> Dptos_empresa = new HashMap();
-        HashMap<String, Area> Areas_empresa = new HashMap();
-        HashMap<String, Cargo> Cargos_empresa = new HashMap();*/
+       
         Departamento depss= new Departamento();
         Area a = new Area();
         Cargo c = new Cargo();
@@ -345,7 +345,11 @@ public class ProyectoPrimerParcial {
                     c.MostrarColeccion(Areas_empresa);
                     c.Ingreso(Cargos_empresa, "cargo");
                     Cargos_empresa.put(c.getCodigo(), c);
-                    arch.EscribirArchivo(c, "Cargo.txt");
+                    try{
+                    arch.EscribirArchivo(c, "Cargo");
+                    }catch(IOException e){
+                        System.out.println(e+" 355");
+                    }
                     break;
                 }
                 case 2:
@@ -411,7 +415,7 @@ public class ProyectoPrimerParcial {
     
     
     
-    private void MENU() throws IOException      
+    private void MENU()
     {
        
         Scanner ingreso= new Scanner(System.in);
@@ -442,8 +446,9 @@ public class ProyectoPrimerParcial {
            
        }
     
-        private void MenuEmpleados() throws IOException{
+        private void MenuEmpleados(){
         Scanner ingreso= new Scanner(System.in);
+         Archivos arch = new Archivos();
         boolean v;
         Empleado emp = null;
         String cod="";
@@ -464,7 +469,11 @@ public class ProyectoPrimerParcial {
                         v=emp.Ingreso(emplist,Dptos_empresa,Areas_empresa,Cargos_empresa);
                         if(v==true){
                             emplist.put(emp.Cedula, emp);
-                            arch.EscribirArchivo(emp,"Empleado.txt");
+                            try{
+                            arch.EscribirArchivo(emp,"Empleado");
+                            }catch(IOException e){
+                                System.out.println(e+" 465");
+                            }
                             System.out.println("Desea ingresar otro empleado? S/N");
                              cod=ingreso.nextLine();
                             

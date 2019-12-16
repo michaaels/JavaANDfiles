@@ -7,18 +7,16 @@ package proyectoprimerparcial;
 
 
 import java.io.BufferedWriter;
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
 import proyectoprimerparcial.clasificacion_empresa.*;
 
 
@@ -28,7 +26,7 @@ public class Archivos implements Serializable{
         ObjectOutputStream oos;
         ObjectInputStream ois;
         FileOutputStream fos;
-        static String EnlaceArchivo="C:/Users/InternetPC/Desktop/ProyectoPrimerParcial/";
+        static String EnlaceArchivo="";
 
         
     public void EscribirArchivo(Object obj,String NomArchivo) throws FileNotFoundException, IOException{
@@ -51,7 +49,7 @@ public class Archivos implements Serializable{
             }
             if(obj instanceof Departamento){
                 final Departamento other = (Departamento) obj;
-                System.out.println(other.Nombre+"Ha sido el protected lapirix");
+                
                 oos.writeObject(other);
             }
             
@@ -76,37 +74,42 @@ public class Archivos implements Serializable{
        
     }
         
-    public static HashMap LeerArchivo(String NomArchivo,HashMap c) throws FileNotFoundException, IOException, ClassNotFoundException{
+    public void LeerArchivo(String NomArchivo,HashMap c){
        String enlace=EnlaceArchivo+NomArchivo+".txt";
-       File archivo = new File(enlace);
-        ObjectInputStream ois =new ObjectInputStream(new FileInputStream(archivo));
+       archivo = new File(enlace);
+       
         HashMap<String,Empleado> otrolistE= new HashMap<>();
         HashMap<String,Departamento> otrolistD= new HashMap<>();
         HashMap<String,Area> otrolistA= new HashMap<>();
         HashMap<String,Cargo> otrolistC= new HashMap<>();
         
         int ubi=0;//saber cual es 
-        
+        try{ 
+        ObjectInputStream ois =new ObjectInputStream(new FileInputStream(archivo));
         Object aux = ois.readObject();
-           
+          
         // Mientras haya objetos
         while (aux!=null)
         {
+            
              if(aux instanceof Empleado){
                 
                 aux = ois.readObject();
                 final Empleado other = (Empleado) aux;
                 otrolistE.put(other.CodigoEmpleado,other);
                 ubi=1;
+                 System.out.println(ubi);
 
             }
             if(aux instanceof Departamento){
                 
                 aux = ois.readObject();
-                final Departamento other = (Departamento) aux;
-                otrolistD.put(other.getCodigo(),other);
-                ubi=2;
                 
+                Departamento other = (Departamento) aux;
+                System.out.println(other.Nombre+"el nombre es si vale");
+                //otrolistD.put(other.getCodigo(),other);
+                ubi=2;
+                System.out.println(ubi);
             }
             
             if(aux instanceof Area){
@@ -115,7 +118,7 @@ public class Archivos implements Serializable{
                 final Area other = (Area) aux;
                 otrolistA.put(other.getCodigo(),other);
                 ubi=3;
-                
+                System.out.println(ubi);
             }
             
             if(aux instanceof Cargo){
@@ -124,11 +127,21 @@ public class Archivos implements Serializable{
                 final Cargo other = (Cargo) aux;
                 otrolistC.put(other.getCodigo(),other);
                 ubi=4;   
+                System.out.println(ubi);
             }
-
+            System.out.println("Salio :/");
         }
         ois.close();
+     }catch(FileNotFoundException a ){
+         System.out.println("No se encontro el archivo");
+     }catch(IOException b){
+            b.printStackTrace();
+            System.out.println("Constructs an EOFException with null as its error detail message.");
+     }catch(ClassNotFoundException e){
+         System.out.println("La clase no se encuentra");
+     }
         
+      /*  
         if(ubi==1)
             return otrolistE;
         if(ubi==2)
@@ -139,7 +152,7 @@ public class Archivos implements Serializable{
             return otrolistC;
         
         
-            return null;
+            return null;*/
     }
     
 }

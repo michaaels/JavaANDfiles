@@ -161,19 +161,19 @@ public class  Empleado extends Datos implements M_Empleados,Serializable{
             
             //ProyectoPrimerParcial m =new ProyectoPrimerParcial();
             Departamento dep = new Departamento();
-            dep=dep.BuscarDep(depa);
+            //dep=dep.BuscarDep(depa);
             //System.out.println("Escoja un Departamento: ");
-            super.setDepartamento(dep.getNombre());
+            super.setDepartamento("0");
             
             Area ar = new Area();
-            ar=ar.BuscarArea(area);
+            //ar=ar.BuscarArea(area);
             //System.out.println("Area: ");
-            super.setArea(ar.getNombre());
+            super.setArea("0");
             
             Cargo cr = new Cargo();
-            cr=cr.BuscarCargo(carg);
+           // cr=cr.BuscarCargo(carg);
             //System.out.println("Cargo: ");
-            super.setCargo(cr.getNombre());
+            super.setCargo("0");
        
         }else{
             System.out.println("El empleado ya se encuentra registrado");
